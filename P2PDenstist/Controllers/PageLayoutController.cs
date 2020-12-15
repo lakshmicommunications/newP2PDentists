@@ -1,5 +1,6 @@
 ﻿using P2PDenstist.Connector;
 using P2PDenstist.Models;
+using P2PDenstist.Models.Responses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +18,7 @@ namespace P2PDenstist.Controllers
             PageResponseModel pageResponseModel = new PageResponseModel();
             List<Pagelayouts> pagelayouts = new List<Pagelayouts>();
             PageRepository pageRepository = new PageRepository();
-            pagelayouts = pageRepository.getHomePage(domainname, pageno);
+            pagelayouts = pageRepository.homeListDetails(domainname, pageno);
             if (pagelayouts.Count <= 0)
             {
                 pageResponseModel.responseCode = "200";
@@ -32,5 +33,38 @@ namespace P2PDenstist.Controllers
             }
             return pageResponseModel;
         }
+
+        [HttpGet]
+        public ListingAdvertResponse getFeaturedAdverts(string domainName,string pagenumber)
+        {
+            ListingAdvertResponse listingAdvertResponse = new ListingAdvertResponse();
+            List<ListingAdvert> listingAdvert = new List<ListingAdvert>();
+            PageRepository pageRepository = new PageRepository();
+            listingAdvert = pageRepository.listingAdvertList(domainName, pagenumber);
+            if (listingAdvert.Count <= 0)
+            {
+                listingAdvertResponse.responseCode = "200";
+                listingAdvertResponse.responseMessage = "No data found";
+                listingAdvertResponse.listingAdvert = listingAdvert;
+            }
+            else
+            {
+                listingAdvertResponse.responseCode = "200";
+                listingAdvertResponse.responseMessage = "Listing details";
+                listingAdvertResponse.listingAdvert = listingAdvert;
+            }
+            return listingAdvertResponse;
+        }
+
+
+        /*[HttpPost]
+        [Obsolete]
+        public PageAddedResponse postHomePage(Pagelayouts pagelayouts)
+        {
+            PageAddedResponse pageAddedResponse = new PageAddedResponse();
+            PageRepository pageRepository = new PageRepository();
+            pageAddedResponse = pageRepository.addedPageDetail(pagelayouts);
+            return pageAddedResponse;
+        }*/
     }
 }
