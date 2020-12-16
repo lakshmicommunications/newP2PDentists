@@ -87,5 +87,39 @@ namespace P2PDenstist.Connector
                 return userDetails;
         }
 
+        public List<UserDetails>UserDetailsvalidate(LoginRequestModel loginRequest)
+        {
+            List<UserDetails> userDetails = new List<UserDetails>();
+            using (MySqlConnection sqlConnection = new MySqlConnection(connectstring))
+            {
+                using (MySqlCommand sqlCommand = sqlConnection.CreateCommand())
+                {
+                    sqlCommand.CommandText = "SELECT *FROM tbl_users WHERE fld_username='"+loginRequest.email+"'"+ " AND fld_password='"+loginRequest.password+"'";
+                    sqlCommand.CommandType = System.Data.CommandType.Text;
+                    sqlCommand.Connection = sqlConnection;
+                    sqlConnection.Open();
+                    using (MySqlDataReader sqlDataReader = sqlCommand.ExecuteReader())
+                    {
+                        while (sqlDataReader.Read())
+                        {
+                            userDetails.Add(new UserDetails
+                            {
+                                userID = sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_userId")),
+                                profileID = sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_profileId")),
+                                userName = sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_username")),
+                                password = sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_password")),
+                                userRole = sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_userRole")),
+                                lastLogin = sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_lastLogin")),
+                                imageURL = sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_imageUrl")),
+                                logoURL = sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_logoUrl")),
+                                cDate = sqlDataReader.GetString(sqlDataReader.GetOrdinal("tbl_cDate")),
+                            });
+                        }
+                    }
+                }
+            }
+                return userDetails;
+        }
+
     }
 }

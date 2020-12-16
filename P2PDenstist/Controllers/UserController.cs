@@ -70,5 +70,26 @@ namespace P2PDenstist.Controllers
             }
             return profileDetailsResponse;
         }
+
+        [HttpPost]
+        public userValidationResponseModel validateUser(LoginRequestModel loginRequestModel)
+        {
+            userValidationResponseModel userValidationResponseModel = new userValidationResponseModel();
+            UserRepository userRepository = new UserRepository();
+            userValidationResponseModel.userDetails = userRepository.UserDetailsvalidate(loginRequestModel);
+            if (userValidationResponseModel.userDetails.Count <= 0)
+            {
+                userValidationResponseModel.userDetails = userRepository.UserDetailsvalidate(loginRequestModel);
+                userValidationResponseModel.responseCode = "200";
+                userValidationResponseModel.responseMesssage = "Login failed";
+            }
+            else
+            {
+                userValidationResponseModel.userDetails = userRepository.UserDetailsvalidate(loginRequestModel);
+                userValidationResponseModel.responseCode = "200";
+                userValidationResponseModel.responseMesssage = "Login Successfully";
+            }
+            return userValidationResponseModel;
+        }
     }
 }
