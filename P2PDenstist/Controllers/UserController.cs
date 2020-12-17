@@ -91,5 +91,15 @@ namespace P2PDenstist.Controllers
             }
             return userValidationResponseModel;
         }
+        [HttpPost]
+        public PasswordUpdateResponse updateProfile(PasswordUpdateRequest passwordUpdate)
+        {
+            PasswordUpdateResponse response = new PasswordUpdateResponse();
+            UserRepository userRepository = new UserRepository();
+            response = userRepository.passwordUpdateResponse(passwordUpdate);
+            response.responseCode = "200";
+            response.responseMessage = " Updated username and password successfully";
+            return response;
+        }
     }
 }

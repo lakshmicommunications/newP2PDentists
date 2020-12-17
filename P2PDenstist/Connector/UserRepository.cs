@@ -121,5 +121,35 @@ namespace P2PDenstist.Connector
                 return userDetails;
         }
 
+        public PasswordUpdateResponse passwordUpdateResponse(PasswordUpdateRequest passwordUpdate)
+        {
+            PasswordUpdateResponse passwordUpdateResponse = new PasswordUpdateResponse();
+            using (MySqlConnection sqlConnection = new MySqlConnection(connectstring))
+            {
+                using (MySqlCommand sqlCommand = sqlConnection.CreateCommand())
+                {
+                    try
+                    {
+                        sqlCommand.CommandText = " UPDATE tbl_users SET fld_username='" + passwordUpdate.userName + "'" + "," + " fld_password='" + passwordUpdate.password + "'" + " WHERE fld_userId='" + passwordUpdate.userID + "'" + "";
+                        sqlConnection.Open();
+                        using (MySqlDataReader reader = sqlCommand.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+
+                            }
+                        }
+                        sqlConnection.Close();
+                    }
+                    catch(Exception e)
+                    {
+                        Console.WriteLine("" + e.ToString());
+                    }
+                }
+            }
+
+            return passwordUpdateResponse;
+        }
+
     }
 }
