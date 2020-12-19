@@ -37,17 +37,7 @@ namespace P2PDenstist.Controllers
         }
 
 
-        [HttpGet]
-        public SpecizationListDetailsModel getSpecializationList(string domainname,string pagenumber)
-        {
-            SpecizationListDetailsModel specizationListDetailsModel = new SpecizationListDetailsModel();
-            PageRepository pageRepository = new PageRepository();
-            specizationListDetailsModel.responseCode = "200";
-            specizationListDetailsModel.responseMessage = "SpecializationDetails";
-            specizationListDetailsModel.speciazationsMaster = pageRepository.speciazationMasters(domainname, pagenumber);
-            specizationListDetailsModel.speciazationsCategory = pageRepository.speciazations(domainname, pagenumber);
-            return specizationListDetailsModel;
-        }
+        
 
         [HttpGet]
         public ProfileDetailsResponseModel claimListing()

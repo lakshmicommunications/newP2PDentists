@@ -188,6 +188,7 @@
     <Compile Include="Models\Requests\PasswordUpdateRequest.cs" />
     <Compile Include="Models\Requests\SpecializationCategory.cs" />
     <Compile Include="Models\Requests\SpeciazationMaster.cs" />
+    <Compile Include="Models\Requests\TestimonialsRequest.cs" />
     <Compile Include="Models\Requests\UserDetails.cs" />
     <Compile Include="Models\Responses\ListingAdvert.cs" />
     <Compile Include="Models\Responses\ListingAdvertResponse.cs" />
@@ -200,6 +201,8 @@
     <Compile Include="Models\Responses\SpeciazationModel.cs" />
     <Compile Include="Models\Responses\SpecizationListDetailsModel.cs" />
     <Compile Include="Models\Responses\testimonial.cs" />
+    <Compile Include="Models\Responses\TestimonialAddedResponse.cs" />
+    <Compile Include="Models\Responses\UpdateResponseModel.cs" />
     <Compile Include="Models\Responses\UserAddedResponse.cs" />
     <Compile Include="Models\Responses\userValidationResponseModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

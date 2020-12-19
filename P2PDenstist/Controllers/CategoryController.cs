@@ -22,6 +22,62 @@ namespace P2PDenstist.Controllers
             return specialCategoryAddedResponse;
         }
 
-       
+        [HttpPost]
+        public UpdateResponseModel updateSpecialization(SpeciazationMaster speciazationMaster)
+        {
+            UpdateResponseModel updateResponseModel = new UpdateResponseModel();
+            CategoryRepository categoryRepository = new CategoryRepository();
+            updateResponseModel = categoryRepository.updateResponseModel(speciazationMaster);
+            updateResponseModel.responseCode = "200";
+            updateResponseModel.message = "Updated successfully";
+            return updateResponseModel;
+        }
+
+        [HttpGet]
+        public SpecizationListDetailsModel getSpecializationList(string domainname, string pagenumber)
+        {
+            SpecizationListDetailsModel specizationListDetailsModel = new SpecizationListDetailsModel();
+            PageRepository pageRepository = new PageRepository();
+            specizationListDetailsModel.responseCode = "200";
+            specizationListDetailsModel.responseMessage = "SpecializationDetails";
+            specizationListDetailsModel.speciazationsMaster = pageRepository.speciazationMasters(domainname, pagenumber);
+            specizationListDetailsModel.speciazationsCategory = pageRepository.speciazations(domainname, pagenumber);
+            return specizationListDetailsModel;
+        }
+        
+        [HttpGet]
+        public SpecizationListDetailsModel getSpecialization(string domainname, string pagenumber)
+        {
+            SpecizationListDetailsModel specizationListDetailsModel = new SpecizationListDetailsModel();
+            PageRepository pageRepository = new PageRepository();
+            specizationListDetailsModel.responseCode = "200";
+            specizationListDetailsModel.responseMessage = "SpecializationDetails";
+            specizationListDetailsModel.speciazationsMaster = pageRepository.speciazationMasters(domainname, pagenumber);
+            specizationListDetailsModel.speciazationsCategory = pageRepository.speciazations(domainname, pagenumber);
+            return specizationListDetailsModel;
+        }
+
+        [HttpPost]
+        [Obsolete]
+        public TestimonialAddedResponse testimonialAdded(TestimonialsRequest testimonialsRequest)
+        {
+            TestimonialAddedResponse testimonialAddedResponse = new TestimonialAddedResponse();
+            CategoryRepository categoryRepository = new CategoryRepository();
+            testimonialAddedResponse = categoryRepository.testimonialAdded(testimonialsRequest);
+            return testimonialAddedResponse;
+        }
+
+        [HttpPost]
+        public UpdateResponseModel updateTestimonials(TestimonialsRequest testimonialsRequest)
+        {
+            UpdateResponseModel updateResponseModel = new UpdateResponseModel();
+            CategoryRepository categoryRepository = new CategoryRepository();
+            updateResponseModel = categoryRepository.testimonialsUpdated(testimonialsRequest);
+            updateResponseModel.responseCode = "200";
+            updateResponseModel.message = "Updated Testimonial details successfully";
+            return updateResponseModel;
+        }
+
+
     }
 }
