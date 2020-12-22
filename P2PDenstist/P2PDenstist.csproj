@@ -183,6 +183,10 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Requests\ImageAddRequest.cs" />
+    <Compile Include="Models\Requests\ImageUpdateListingProfile.cs" />
+    <Compile Include="Models\Requests\ListingProfileRequest.cs" />
+    <Compile Include="Models\Requests\ListingProfileUpdateRequest.cs" />
     <Compile Include="Models\Requests\LoginRequestModel.cs" />
     <Compile Include="Models\Requests\Pagelayouts.cs" />
     <Compile Include="Models\Requests\PasswordUpdateRequest.cs" />
@@ -190,8 +194,11 @@
     <Compile Include="Models\Requests\SpeciazationMaster.cs" />
     <Compile Include="Models\Requests\TestimonialsRequest.cs" />
     <Compile Include="Models\Requests\UserDetails.cs" />
+    <Compile Include="Models\Requests\VideoUpdateRequest.cs" />
+    <Compile Include="Models\Responses\ImageAddedResponse.cs" />
     <Compile Include="Models\Responses\ListingAdvert.cs" />
     <Compile Include="Models\Responses\ListingAdvertResponse.cs" />
+    <Compile Include="Models\Responses\ListingProfileAddedResponse.cs" />
     <Compile Include="Models\Responses\ListProfileListResponse.cs" />
     <Compile Include="Models\Responses\PageAddedResponse.cs" />
     <Compile Include="Models\Responses\PageResponseModel.cs" />
@@ -262,6 +269,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="upload_images\" />
+    <Folder Include="upload_videos\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
