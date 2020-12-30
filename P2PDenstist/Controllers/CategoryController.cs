@@ -33,6 +33,28 @@ namespace P2PDenstist.Controllers
             return updateResponseModel;
         }
 
+       [HttpGet]
+       public PackageListDetailsModel packageList()
+        {
+            PackageListDetailsModel packageListmodel = new PackageListDetailsModel();
+            List<PackageListmodel> packageListmodels = new List<PackageListmodel>();
+            PageRepository pageRepository = new PageRepository();
+            packageListmodels = pageRepository.packageListmodels();
+            if (packageListmodels.Count <= 0)
+            {
+                packageListmodel.responseCode = "200";
+                packageListmodel.responseMessage = "No data found";
+                packageListmodel.packageListmodels = packageListmodels;
+            }
+            else
+            {
+                packageListmodel.responseCode = "200";
+                packageListmodel.responseMessage = "Package List details";
+                packageListmodel.packageListmodels = packageListmodels;
+            }
+            return packageListmodel;
+        }
+
         [HttpGet]
         public SpecizationListDetailsModel getSpecializationList(string domainname, string pagenumber)
         {
@@ -55,6 +77,28 @@ namespace P2PDenstist.Controllers
             specizationListDetailsModel.speciazationsMaster = pageRepository.speciazationMasters(domainname, pagenumber);
             specizationListDetailsModel.speciazationsCategory = pageRepository.speciazations(domainname, pagenumber);
             return specizationListDetailsModel;
+        }
+
+        [HttpGet]
+        public CategoryDetailsResponseModel specialCategoryListModel()
+        {
+            CategoryDetailsResponseModel categoryDetailsResponseModel = new CategoryDetailsResponseModel();
+            List<SpeciazationModel> spCategory = new List<SpeciazationModel>();
+            PageRepository pageRepository = new PageRepository();
+            spCategory = pageRepository.CategorySpecial();
+            if (spCategory.Count <= 0)
+            {
+                categoryDetailsResponseModel.responseCode = "200";
+                categoryDetailsResponseModel.responseMessage = "Nodata found";
+                categoryDetailsResponseModel.spCateogory = spCategory;
+            }
+            else
+            {
+                categoryDetailsResponseModel.responseCode = "200";
+                categoryDetailsResponseModel.responseMessage = "Category special details";
+                categoryDetailsResponseModel.spCateogory = spCategory;
+            }
+            return categoryDetailsResponseModel;
         }
 
         [HttpPost]

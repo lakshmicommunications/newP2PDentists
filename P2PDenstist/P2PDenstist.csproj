@@ -183,6 +183,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Requests\AddBannerRequestModel.cs" />
+    <Compile Include="Models\Requests\DoctorregisterModel.cs" />
+    <Compile Include="Models\Requests\HomepageVideolist.cs" />
     <Compile Include="Models\Requests\ImageAddRequest.cs" />
     <Compile Include="Models\Requests\ImageUpdateListingProfile.cs" />
     <Compile Include="Models\Requests\ListingProfileRequest.cs" />
@@ -190,23 +193,33 @@
     <Compile Include="Models\Requests\LoginRequestModel.cs" />
     <Compile Include="Models\Requests\Pagelayouts.cs" />
     <Compile Include="Models\Requests\PasswordUpdateRequest.cs" />
+    <Compile Include="Models\Requests\ProfileRequestDetailsLocationWise.cs" />
     <Compile Include="Models\Requests\SpecializationCategory.cs" />
     <Compile Include="Models\Requests\SpeciazationMaster.cs" />
     <Compile Include="Models\Requests\TestimonialsRequest.cs" />
     <Compile Include="Models\Requests\UserDetails.cs" />
     <Compile Include="Models\Requests\VideoUpdateRequest.cs" />
+    <Compile Include="Models\Responses\AddBannerDetailsResponse.cs" />
+    <Compile Include="Models\Responses\CategoryDetailsResponseModel.cs" />
+    <Compile Include="Models\Responses\DoctorAddedResponseModel.cs" />
+    <Compile Include="Models\Responses\HomepageVideoResponse.cs" />
     <Compile Include="Models\Responses\ImageAddedResponse.cs" />
     <Compile Include="Models\Responses\ListingAdvert.cs" />
     <Compile Include="Models\Responses\ListingAdvertResponse.cs" />
     <Compile Include="Models\Responses\ListingProfileAddedResponse.cs" />
     <Compile Include="Models\Responses\ListProfileListResponse.cs" />
+    <Compile Include="Models\Responses\NearbydoctorListModel.cs" />
+    <Compile Include="Models\Responses\PackageListDetailsModel.cs" />
+    <Compile Include="Models\Responses\PackageListmodel.cs" />
     <Compile Include="Models\Responses\PageAddedResponse.cs" />
     <Compile Include="Models\Responses\PageResponseModel.cs" />
+    <Compile Include="Models\Responses\PaidDoctorReponse.cs" />
     <Compile Include="Models\Responses\PasswordUpdateResponse.cs" />
     <Compile Include="Models\Responses\ProfileDetailsResponseModel.cs" />
     <Compile Include="Models\Responses\SpecialCategoryAddedResponse.cs" />
     <Compile Include="Models\Responses\SpeciazationModel.cs" />
     <Compile Include="Models\Responses\SpecizationListDetailsModel.cs" />
+    <Compile Include="Models\Responses\StripeDetailsModel.cs" />
     <Compile Include="Models\Responses\testimonial.cs" />
     <Compile Include="Models\Responses\TestimonialAddedResponse.cs" />
     <Compile Include="Models\Responses\UpdateResponseModel.cs" />

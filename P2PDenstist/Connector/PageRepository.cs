@@ -54,6 +54,60 @@ namespace P2PDenstist.Connector
             return pagelayouts;
         }
 
+        public List<PackageListmodel> packageListmodels()
+        {
+            List<PackageListmodel> packageListmodels = new List<PackageListmodel>();
+            using (MySqlConnection sqlConnection = new MySqlConnection(connectstring))
+            {
+                using (MySqlCommand mySqlCommand = sqlConnection.CreateCommand())
+                {
+                    mySqlCommand.CommandText = "SELECT *FROM tbl_package_list";
+                    mySqlCommand.CommandType = System.Data.CommandType.Text;
+                    mySqlCommand.Connection = sqlConnection;
+                    sqlConnection.Open();
+                    using (MySqlDataReader sqlDataReader = mySqlCommand.ExecuteReader())
+                    {
+                        while (sqlDataReader.Read())
+                        {
+                            packageListmodels.Add(new PackageListmodel
+                            {
+                                packageID=sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_id")),
+                                packageName=sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_details"))
+                            });
+                        }
+                    }
+                }
+            }
+                return packageListmodels;
+        }
+
+
+        public StripeDetailsModel stripeDetails()
+        {
+            StripeDetailsModel stripeDetailsModel = new StripeDetailsModel();
+            using (MySqlConnection sqlConnection = new MySqlConnection(connectstring))
+            {
+                using (MySqlCommand mySqlCommand = sqlConnection.CreateCommand())
+                {
+                    mySqlCommand.CommandText = "SELECT *FROM tbl_stripe_details";
+                    mySqlCommand.CommandType = System.Data.CommandType.Text;
+                    mySqlCommand.Connection = sqlConnection;
+                    sqlConnection.Open();
+                    using (MySqlDataReader sqlDataReader = mySqlCommand.ExecuteReader())
+                    {
+                        while (sqlDataReader.Read())
+                        {
+                            stripeDetailsModel.secretKey = sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_secret_key"));
+                            stripeDetailsModel.accessKey = sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_access_token"));
+                        }
+                        
+                    }
+                }
+            }
+                return stripeDetailsModel;
+        }
+
+
         [Obsolete]
         public PageAddedResponse addedPageDetail(Pagelayouts pagelayouts)
         {
@@ -187,6 +241,32 @@ namespace P2PDenstist.Connector
         }
 
         public List<SpeciazationModel> speciazations(string domainName,string pageNo)
+        {
+            List<SpeciazationModel> speciazations = new List<SpeciazationModel>();
+            using (MySqlConnection sqlConnection = new MySqlConnection(connectstring))
+            {
+                using (MySqlCommand mySqlCommand = sqlConnection.CreateCommand())
+                {
+                    mySqlCommand.CommandText = "SELECT *FROM tbl_specializationcategory";
+                    mySqlCommand.CommandType = System.Data.CommandType.Text;
+                    mySqlCommand.Connection = sqlConnection;
+                    sqlConnection.Open();
+                    using (MySqlDataReader sqlDataReader = mySqlCommand.ExecuteReader())
+                    {
+                        while (sqlDataReader.Read())
+                        {
+                            speciazations.Add(new SpeciazationModel 
+                            { 
+                            categoryID=sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_sCategoryId")),
+                            specization=sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_specilaization"))
+                            });
+                        }
+                    }
+                }
+            }
+             return speciazations;
+        }
+        public List<SpeciazationModel> CategorySpecial()
         {
             List<SpeciazationModel> speciazations = new List<SpeciazationModel>();
             using (MySqlConnection sqlConnection = new MySqlConnection(connectstring))

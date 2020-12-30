@@ -41,8 +41,93 @@ namespace P2PDenstist.Controllers
             return listProfileListResponse;
         }
 
+        [HttpGet]
+        public HomepageVideoResponse getHomepageVideolist(string profileID)
+        {
+            HomepageVideoResponse homepageVideoResponse = new HomepageVideoResponse();
+            List<HomepageVideolist> homepageVideolists = new List<HomepageVideolist>();
+            UserRepository userRepository = new UserRepository();
+            homepageVideolists = userRepository.homepageVideolists(profileID);
+            if (homepageVideolists.Count <= 0)
+            {
+                homepageVideoResponse.ressponseCode = "200";
+                homepageVideoResponse.ressponseMessage = "No data found";
+                homepageVideoResponse.homepageVideolists = homepageVideolists;
+            }
+            else
+            {
+                homepageVideoResponse.ressponseCode = "200";
+                homepageVideoResponse.ressponseMessage = "Home video list";
+                homepageVideoResponse.homepageVideolists = homepageVideolists;
+            }
+            return homepageVideoResponse;
+        }
 
-        
+        [HttpPost]
+        [Obsolete]
+        public DoctorAddedResponseModel doctorAdded(DoctorregisterModel doctorregisterModel)
+        {
+            DoctorAddedResponseModel doctorAddedResponseModel = new DoctorAddedResponseModel();
+            UserRepository userRepository = new UserRepository();
+            doctorAddedResponseModel = userRepository.doctorAddedResponseModel(doctorregisterModel);
+            return doctorAddedResponseModel;
+        }
+
+        [HttpGet]
+        public NearbydoctorListModel dentistNearby(string lat,string lng)
+        {
+            NearbydoctorListModel nearbydoctorListModel = new NearbydoctorListModel();
+            UserRepository userRepository = new UserRepository();
+            List<ProfileRequestDetailsLocationWise> profileRequestDetailsLocationWises = new List<ProfileRequestDetailsLocationWise>();
+            profileRequestDetailsLocationWises = userRepository.profileRequestDetailsLocationWises(lat, lng);
+            if (profileRequestDetailsLocationWises.Count <= 0)
+            {
+                nearbydoctorListModel.responseCode = "200";
+                nearbydoctorListModel.responseMessage = "No data found";
+                nearbydoctorListModel.profileRequestDetailsLocationWises = profileRequestDetailsLocationWises;
+            }
+            else
+            {
+                nearbydoctorListModel.responseCode = "200";
+                nearbydoctorListModel.responseMessage = "profile details in near by";
+                nearbydoctorListModel.profileRequestDetailsLocationWises = profileRequestDetailsLocationWises;
+            }
+            return nearbydoctorListModel;
+        }
+
+        [HttpGet]
+        public PaidDoctorReponse featuredDocotList()
+        {
+            PaidDoctorReponse paidDoctor = new PaidDoctorReponse();
+            UserRepository userRepository = new UserRepository();
+            List<DoctorregisterModel> doctorAdded = new List<DoctorregisterModel>();
+            doctorAdded = userRepository.doctorregisters();
+            if (doctorAdded.Count <= 0)
+            {
+                paidDoctor.responseCode = "200";
+                paidDoctor.responsemessage = "No data found";
+                paidDoctor.doctorregisterModels = doctorAdded;
+            }
+            else
+            {
+                paidDoctor.responseCode = "200";
+                paidDoctor.responsemessage = "Featured doctor list";
+                paidDoctor.doctorregisterModels = doctorAdded;
+            }
+            return paidDoctor;
+        }
+
+
+        [HttpPost]
+        [Obsolete]
+        public AddBannerDetailsResponse bannerDetailsResponse(AddBannerRequestModel addBannerRequestModel)
+        {
+            AddBannerDetailsResponse addBannerDetailsResponse = new AddBannerDetailsResponse();
+            UserRepository userRepository = new UserRepository();
+            addBannerDetailsResponse = userRepository.addBannerDetails(addBannerRequestModel);
+            return addBannerDetailsResponse;
+        }
+
 
         [HttpGet]
         public ProfileDetailsResponseModel claimListing()

@@ -56,6 +56,15 @@ namespace P2PDenstist.Controllers
             return listingAdvertResponse;
         }
 
+        [HttpGet]
+        public StripeDetailsModel stripeDetails()
+        {
+            StripeDetailsModel stripeDetails = new StripeDetailsModel();
+            PageRepository pageRepository = new PageRepository();
+            stripeDetails = pageRepository.stripeDetails();
+            return stripeDetails;
+        }
+
 
         /*[HttpPost]
         [Obsolete]

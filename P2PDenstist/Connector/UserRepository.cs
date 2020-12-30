@@ -151,6 +151,42 @@ namespace P2PDenstist.Connector
             return passwordUpdateResponse;
         }
 
+        public List<ProfileRequestDetailsLocationWise> profileRequestDetailsLocationWises(String lat,string lng)
+        {
+            List<ProfileRequestDetailsLocationWise> profileRequestDetailsLocationWises = new List<ProfileRequestDetailsLocationWise>();
+            using (MySqlConnection sqlConnection = new MySqlConnection(connectstring))
+            {
+                using (MySqlCommand sqlCommand = sqlConnection.CreateCommand())
+                {
+                    sqlCommand.CommandText = " SELECT *FROM tbl_listingprofile";
+                    sqlCommand.CommandType = System.Data.CommandType.Text;
+                    sqlCommand.Connection = sqlConnection;
+                    sqlConnection.Open();
+                    using (MySqlDataReader sqlDataReader = sqlCommand.ExecuteReader())
+                    {
+                        while (sqlDataReader.Read())
+                        {
+                            profileRequestDetailsLocationWises.Add(new ProfileRequestDetailsLocationWise
+                            {
+                                profileID=sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_profileId")),
+                                userID=sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_userId")),
+                                BusinessName = sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_businessName")),
+                                address = sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_address1")),
+                                address1 = sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_address2")),                          
+                                city = sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_city")),
+                                lat = sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_lat")),
+                                lng = sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_long")),
+                            });
+                        }
+                    }
+                }
+            }
+
+                return profileRequestDetailsLocationWises;
+        }
+
+        
+
         [Obsolete]
         public ListingProfileAddedResponse addedResponse(ListingProfileRequest listingProfileRequest)
         {
@@ -205,6 +241,103 @@ namespace P2PDenstist.Connector
             return addedRespon;
         }
 
+        [Obsolete]
+        public DoctorAddedResponseModel doctorAddedResponseModel(DoctorregisterModel doctorregisterModel)
+        {
+            DoctorAddedResponseModel doctorAddedResponseModel = new DoctorAddedResponseModel();
+            int i = 0; string insertID;
+            using (MySqlConnection sqlConnection = new MySqlConnection(connectstring))
+            {
+                using (MySqlCommand sqlCommand = sqlConnection.CreateCommand())
+                {
+                    sqlCommand.CommandText = "INSERT INTO tbl_doctor_registeration(fld_clinic_name,fld_first_name,fld_last_name,fld_phone,fld_email,fld_password,fld_subcription_status)VALUES(?fld_clinic_name,?fld_first_name,?fld_last_name,?fld_phone,?fld_email,?fld_password,?fld_subcription_status)";
+                    sqlConnection.Open();
+                    sqlCommand.Parameters.Add("fld_clinic_name", doctorregisterModel.clinicName);
+                    sqlCommand.Parameters.Add("fld_first_name", doctorregisterModel.firstName);
+                    sqlCommand.Parameters.Add("fld_last_name", doctorregisterModel.lastName);
+                    sqlCommand.Parameters.Add("fld_phone", doctorregisterModel.phone);
+                    sqlCommand.Parameters.Add("fld_email", doctorregisterModel.email);
+                    sqlCommand.Parameters.Add("fld_password", doctorregisterModel.password);
+                    sqlCommand.Parameters.Add("fld_subcription_status", doctorregisterModel.subscription_status);
+                    i = sqlCommand.ExecuteNonQuery();
+                    insertID = sqlCommand.LastInsertedId.ToString();
+                    sqlConnection.Close();
+                }
+            }
+            if (i >= 1)
+            {
+                doctorAddedResponseModel.responseCode = "200";
+                doctorAddedResponseModel.responseMessage = "response code Added successfully";
+                doctorAddedResponseModel.doctorID = insertID;
+
+            }
+            return doctorAddedResponseModel;
+        }
+
+        public List<DoctorregisterModel> doctorregisters()
+        {
+            List<DoctorregisterModel> doctorregisters = new List<DoctorregisterModel>();
+            using (MySqlConnection sqlConnection = new MySqlConnection(connectstring))
+            {
+                using (MySqlCommand sqlCommand = sqlConnection.CreateCommand())
+                {
+                    sqlCommand.CommandText = " SELECT *FROM tbl_doctor_registeration LIMIT 3";
+                    sqlCommand.CommandType = System.Data.CommandType.Text;
+                    sqlCommand.Connection = sqlConnection;
+                    sqlConnection.Open();
+                    using (MySqlDataReader sqlDataReader = sqlCommand.ExecuteReader())
+                    {
+                        while (sqlDataReader.Read())
+                        {
+                            doctorregisters.Add(new DoctorregisterModel
+                            {
+                                doctorID=sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_id")),
+                                clinicName=sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_clinic_name")),
+                                firstName=sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_first_name")),
+                                lastName=sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_last_name")),
+                                phone=sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_phone")),
+                                email=sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_email")),
+                                password=sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_password")),
+                                subscription_status=sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_subcription_status")),
+                            });
+                        }
+                    }
+                }
+            }
+                return doctorregisters;
+        }
+
+        [Obsolete]
+        public AddBannerDetailsResponse addBannerDetails(AddBannerRequestModel addBannerRequestModel)
+        {
+
+            AddBannerDetailsResponse addBannerDetails = new AddBannerDetailsResponse();
+            int i = 0; string insertID;
+            using (MySqlConnection sqlConnection = new MySqlConnection(connectstring))
+            {
+                using (MySqlCommand sqlCommand = sqlConnection.CreateCommand())
+                {
+                    sqlCommand.CommandText = "INSERT INTO tbl_banner(fld_profile_id,fld_banner_url,fld_page_id)VALUES(?fld_profile_id,?fld_banner_url,?fld_page_id)";
+                    sqlConnection.Open();
+                    sqlCommand.Parameters.Add("fld_profile_id", addBannerRequestModel.profileID);
+                    sqlCommand.Parameters.Add("fld_banner_url", addBannerRequestModel.bannerID);
+                    sqlCommand.Parameters.Add("fld_page_id", addBannerRequestModel.pageID);
+                    i = sqlCommand.ExecuteNonQuery();
+                    insertID = sqlCommand.LastInsertedId.ToString();
+                    sqlConnection.Close();
+                }
+            }
+            if (i >= 1)
+            {
+                addBannerDetails.bannerID = insertID;
+                addBannerDetails.reponseMessage = "Banner added successfully";
+                addBannerDetails.responseCode = "200";
+                
+            }
+                return addBannerDetails;
+        }
+
+
         public UpdateResponseModel updateListingProfile(ListingProfileUpdateRequest listingProfileUpdateRequest)
         {
             UpdateResponseModel updateResponseModel = new UpdateResponseModel();
@@ -238,6 +371,35 @@ namespace P2PDenstist.Connector
                 return updateResponseModel;
         }
 
+
+        public List<HomepageVideolist> homepageVideolists(string profileID)
+        {
+            HomepageVideoResponse homepageVideoResponse = new HomepageVideoResponse();
+            List<HomepageVideolist> homepageVideolists = new List<HomepageVideolist>();
+            using (MySqlConnection sqlConnection = new MySqlConnection(connectstring))
+            {
+                using (MySqlCommand sqlCommand = sqlConnection.CreateCommand())
+                {
+                    sqlCommand.CommandText = " SELECT *FROM tbl_listingprofile  WHERE fld_profileid='" + profileID + "'";
+                    sqlCommand.CommandType = System.Data.CommandType.Text;
+                    sqlCommand.Connection = sqlConnection;
+                    sqlConnection.Open();
+                    using (MySqlDataReader sqlDataReader = sqlCommand.ExecuteReader())
+                    {
+                        while (sqlDataReader.Read())
+                        {
+                            homepageVideolists.Add(new HomepageVideolist
+                            {
+                                profileID=sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_profileId")),
+                                VideoURL=sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_videoUrl"))
+
+                            });
+                        }
+                    }
+                }
+            }
+                return homepageVideolists;
+        }
 
         public UpdateResponseModel imageUpdateListingURL(ImageUpdateListingProfile imageUpdate)
         {
