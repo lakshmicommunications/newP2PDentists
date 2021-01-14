@@ -5,11 +5,10 @@ using System.Web;
 
 namespace P2PDenstist.Models.Requests
 {
-    public class ImageAddRequest
+    public class SessionModel
     {
-        public string imageID { get; set; }
-        public string imageURL { get; set; }
-        public string profileID { get; set; }
+        public string sessionID { get; set; }
         public string sessionToken { get; set; }
+        public string sessionDatetime { get; set; }
     }
 }

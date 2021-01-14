@@ -16,9 +16,9 @@ namespace P2PDenstist.Models.Requests
         {
             get;set;
         }
-    
-    
-    
-    
+
+
+        public string sessionToken { get; set; }
+
     }
 }

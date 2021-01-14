@@ -12,9 +12,11 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
+using System.Web.Http.Cors;
 
 namespace P2PDenstist.Controllers
 {
+    [EnableCors(origins: "*", headers: "*", methods: "*", exposedHeaders: "X-My-Header")]
     public class UserController : ApiController
     {
         [HttpPost]
@@ -152,23 +154,12 @@ namespace P2PDenstist.Controllers
         }
 
         [HttpPost]
+        [Obsolete]
         public userValidationResponseModel validateUser(LoginRequestModel loginRequestModel)
         {
             userValidationResponseModel userValidationResponseModel = new userValidationResponseModel();
             UserRepository userRepository = new UserRepository();
-            userValidationResponseModel.userDetails = userRepository.UserDetailsvalidate(loginRequestModel);
-            if (userValidationResponseModel.userDetails.Count <= 0)
-            {
-                userValidationResponseModel.userDetails = userRepository.UserDetailsvalidate(loginRequestModel);
-                userValidationResponseModel.responseCode = "200";
-                userValidationResponseModel.responseMesssage = "Login failed";
-            }
-            else
-            {
-                userValidationResponseModel.userDetails = userRepository.UserDetailsvalidate(loginRequestModel);
-                userValidationResponseModel.responseCode = "200";
-                userValidationResponseModel.responseMesssage = "Login Successfully";
-            }
+            userValidationResponseModel = userRepository.UserDetailsvalidate(loginRequestModel);
             return userValidationResponseModel;
         }
         [HttpPost]
@@ -267,8 +258,7 @@ namespace P2PDenstist.Controllers
             {
                 updateResponseModel.message = e.ToString();
             }
-            updateResponseModel.responseCode = "200";
-            updateResponseModel.message = " Updated successfully.";
+            
             return updateResponseModel;
         }
         
@@ -303,6 +293,7 @@ namespace P2PDenstist.Controllers
                         updateValue.imageURL = "/upload_videos/" + updateValue.profileID + "/" + fileName1;
                     }
                     UserRepository repository = new UserRepository();
+
                     updateResponseModel = repository.videoUpdateListingURL(updateValue);
                     
                 }
@@ -312,8 +303,7 @@ namespace P2PDenstist.Controllers
             {
                 updateResponseModel.message = e.ToString();
             }
-            updateResponseModel.responseCode = "200";
-            updateResponseModel.message = " Updated successfully.";
+           
             return updateResponseModel;
         }
         public async Task<ImageAddedResponse> updatePhoto()

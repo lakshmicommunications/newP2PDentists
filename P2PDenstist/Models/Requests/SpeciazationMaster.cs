@@ -10,5 +10,6 @@ namespace P2PDenstist.Models.Requests
         public string specizationID { get; set; }
         public string specizationName{ get; set; }
         public string sCategory{ get; set; }
+        public string sessionToken { get; set; }
     }
 }

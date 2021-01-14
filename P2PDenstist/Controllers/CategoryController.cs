@@ -7,9 +7,11 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Cors;
 
 namespace P2PDenstist.Controllers
 {
+    [EnableCors(origins: "*", headers: "*", methods: "*", exposedHeaders: "X-My-Header")]
     public class CategoryController : ApiController
     {
         [HttpPost]
@@ -27,9 +29,19 @@ namespace P2PDenstist.Controllers
         {
             UpdateResponseModel updateResponseModel = new UpdateResponseModel();
             CategoryRepository categoryRepository = new CategoryRepository();
-            updateResponseModel = categoryRepository.updateResponseModel(speciazationMaster);
-            updateResponseModel.responseCode = "200";
-            updateResponseModel.message = "Updated successfully";
+            if (speciazationMaster.sessionToken != null)
+            {
+                updateResponseModel = categoryRepository.updateResponseModel(speciazationMaster);
+                updateResponseModel.responseCode = "200";
+                updateResponseModel.message = "Updated successfully";
+            }
+            else
+            {
+                updateResponseModel.responseCode = "200";
+                updateResponseModel.message = "Session cant be null";
+            }
+            
+            
             return updateResponseModel;
         }
 

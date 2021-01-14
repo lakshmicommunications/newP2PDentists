@@ -82,43 +82,115 @@ namespace P2PDenstist.Connector
                             });
                         }
                     }
+                    sqlConnection.Close();
                 }
             }
                 return userDetails;
         }
 
-        public List<UserDetails>UserDetailsvalidate(LoginRequestModel loginRequest)
+        [Obsolete]
+        public userValidationResponseModel UserDetailsvalidate(LoginRequestModel loginRequest)
         {
+            userValidationResponseModel userValidationResponseModel = new userValidationResponseModel();
             List<UserDetails> userDetails = new List<UserDetails>();
+            List<SessionModel> sessions = new List<SessionModel>();
+            userDetails.Clear(); sessions.Clear();
             using (MySqlConnection sqlConnection = new MySqlConnection(connectstring))
             {
-                using (MySqlCommand sqlCommand = sqlConnection.CreateCommand())
+
+                int i = 0; string insertID = null;
+                
                 {
-                    sqlCommand.CommandText = "SELECT *FROM tbl_users WHERE fld_username='"+loginRequest.email+"'"+ " AND fld_password='"+loginRequest.password+"'";
-                    sqlCommand.CommandType = System.Data.CommandType.Text;
-                    sqlCommand.Connection = sqlConnection;
-                    sqlConnection.Open();
-                    using (MySqlDataReader sqlDataReader = sqlCommand.ExecuteReader())
+                    using (MySqlCommand sqlCommand = sqlConnection.CreateCommand())
                     {
-                        while (sqlDataReader.Read())
-                        {
-                            userDetails.Add(new UserDetails
-                            {
-                                userID = sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_userId")),
-                                profileID = sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_profileId")),
-                                userName = sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_username")),
-                                password = sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_password")),
-                                userRole = sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_userRole")),
-                                lastLogin = sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_lastLogin")),
-                                imageURL = sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_imageUrl")),
-                                logoURL = sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_logoUrl")),
-                                cDate = sqlDataReader.GetString(sqlDataReader.GetOrdinal("tbl_cDate")),
-                            });
-                        }
+                        sqlCommand.CommandText = "INSERT INTO tbl_session_management(fld_session_token,fld_date_time)VALUES(?fld_session_token,?fld_date_time)";
+                        sqlConnection.Open();
+                        sqlCommand.Parameters.Add("fld_session_token", Guid.NewGuid().ToString());
+                        sqlCommand.Parameters.Add("fld_date_time", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+                        i = sqlCommand.ExecuteNonQuery();
+                        insertID = sqlCommand.LastInsertedId.ToString();
+                        sqlConnection.Close();
                     }
                 }
+                if (i >= 1)
+                {
+                    using (MySqlCommand sqlCommand = sqlConnection.CreateCommand())
+                    {
+                        sqlCommand.CommandText = "SELECT *FROM tbl_session_management WHERE fld_session_id='" + insertID+"'";
+                        sqlCommand.CommandType = System.Data.CommandType.Text;
+                        sqlCommand.Connection = sqlConnection;
+                        sqlConnection.Open();
+                        using (MySqlDataReader sqlDataReader = sqlCommand.ExecuteReader())
+                        {
+                            while (sqlDataReader.Read())
+                            {
+                                sessions.Add(new SessionModel
+                                {
+                                    sessionID=sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_session_id")),
+                                    sessionToken=sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_session_token")),
+                                    sessionDatetime=sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_date_time")),
+                                });
+                            }
+                        }
+                        sqlConnection.Close();
+                    }
+                   
+                }
+                if (sessions.Count <= 0)
+                {
+
+                }
+                else
+                {
+                    string tokenID = null;
+                    foreach(var Item in sessions)
+                    {
+                        tokenID = Item.sessionToken;
+                    }
+                    using (MySqlCommand sqlCommand = sqlConnection.CreateCommand())
+                    {
+                        sqlCommand.CommandText = "SELECT *FROM tbl_users WHERE fld_username='" + loginRequest.email + "'" + " AND fld_password='" + loginRequest.password + "'";
+                        sqlCommand.CommandType = System.Data.CommandType.Text;
+                        sqlCommand.Connection = sqlConnection;
+                        sqlConnection.Open();
+                        using (MySqlDataReader sqlDataReader = sqlCommand.ExecuteReader())
+                        {
+                            while (sqlDataReader.Read())
+                            {
+                                userDetails.Add(new UserDetails
+                                {
+                                    userID = sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_userId")),
+                                    profileID = sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_profileId")),
+                                    userName = sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_username")),
+                                    password = sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_password")),
+                                    userRole = sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_userRole")),
+                                    lastLogin = sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_lastLogin")),
+                                    imageURL = sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_imageUrl")),
+                                    logoURL = sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_logoUrl")),
+                                    cDate = sqlDataReader.GetString(sqlDataReader.GetOrdinal("tbl_cDate")),
+                                    sessionToken = tokenID
+                                });
+                            }
+                        }
+                        sqlConnection.Close();
+                    }
+                }
+                
             }
-                return userDetails;
+            if (userDetails.Count <= 0)
+            {
+                userValidationResponseModel.responseCode = "200";
+                userValidationResponseModel.responseMesssage = "Invalid username and password";
+                userValidationResponseModel.userDetails = userDetails;
+            }
+            else
+            {
+                userValidationResponseModel.responseCode = "200";
+                userValidationResponseModel.responseMesssage = "Login successfully";
+                userValidationResponseModel.userDetails = userDetails;
+            }
+            
+            return userValidationResponseModel;
         }
 
         public PasswordUpdateResponse passwordUpdateResponse(PasswordUpdateRequest passwordUpdate)
@@ -404,21 +476,59 @@ namespace P2PDenstist.Connector
         public UpdateResponseModel imageUpdateListingURL(ImageUpdateListingProfile imageUpdate)
         {
             UpdateResponseModel updateResponseModel = new UpdateResponseModel();
+            List<SessionModel> sessionListDetails = new List<SessionModel>();
             using (MySqlConnection sqlConnection = new MySqlConnection(connectstring))
             {
                 using (MySqlCommand sqlCommand = sqlConnection.CreateCommand())
                 {
-                    sqlCommand.CommandText = " UPDATE tbl_listingprofile SET fld_imageUrl='" + imageUpdate.imageURL + "'" +
-                        " WHERE fld_profileId='" + imageUpdate.profileID + "'";
-                    sqlConnection.Open();
-                    using (MySqlDataReader reader = sqlCommand.ExecuteReader())
+                    if (imageUpdate.sessionToken != null)
                     {
-                        while (reader.Read())
+                        sessionListDetails.Clear();
+                        sqlCommand.CommandText = " SELECT *FROM tbl_session_management  WHERE fld_session_token='" + imageUpdate.sessionToken + "'";
+                        sqlCommand.CommandType = System.Data.CommandType.Text;
+                        sqlCommand.Connection = sqlConnection;
+                        sqlConnection.Open();
+                        using (MySqlDataReader sqlDataReader = sqlCommand.ExecuteReader())
                         {
+                            while (sqlDataReader.Read())
+                            {
+                                sessionListDetails.Add(new SessionModel
+                                {
+                                    sessionDatetime = sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_date_time")),
+                                    sessionToken = sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_session_token"))
+                                });
+                            }
+                        }
+                        sqlConnection.Close();
+                        if (sessionListDetails.Count <= 0)
+                        {
+                            updateResponseModel.responseCode = "200";
+                            updateResponseModel.message = "Session token invalid";
+                        }
+                        else
+                        {
+                         sqlCommand.CommandText = " UPDATE tbl_listingprofile SET fld_logoUrl='" + imageUpdate.imageURL + "'" +
+                        " WHERE fld_profileId='" + imageUpdate.profileID + "'";
+                            sqlConnection.Open();
+                            using (MySqlDataReader reader = sqlCommand.ExecuteReader())
+                            {
+                                while (reader.Read())
+                                {
 
+                                }
+                            }
+                            sqlConnection.Close();
+                            updateResponseModel.responseCode = "200";
+                            updateResponseModel.message = " Updated successfully.";
                         }
                     }
-                    sqlConnection.Close();
+                    else
+                    {
+                        updateResponseModel.responseCode = "400";
+                        updateResponseModel.message = "invalid parameter parsing";
+                    }
+
+
                 }
             }
 
@@ -428,21 +538,65 @@ namespace P2PDenstist.Connector
         public UpdateResponseModel videoUpdateListingURL(ImageUpdateListingProfile imageUpdate)
         {
             UpdateResponseModel updateResponseModel = new UpdateResponseModel();
+            List<SessionModel> sessionListDetails = new List<SessionModel>();
             using (MySqlConnection sqlConnection = new MySqlConnection(connectstring))
             {
                 using (MySqlCommand sqlCommand = sqlConnection.CreateCommand())
-                {
-                    sqlCommand.CommandText = " UPDATE tbl_listingprofile SET fld_videoUrl='" + imageUpdate.imageURL + "'" +
-                        " WHERE fld_profileId='" + imageUpdate.profileID + "'";
-                    sqlConnection.Open();
-                    using (MySqlDataReader reader = sqlCommand.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
 
+                {
+                    if (imageUpdate.sessionToken != null)
+
+                    {
+                        sessionListDetails.Clear();
+                        sqlCommand.CommandText = " SELECT *FROM tbl_session_management  WHERE fld_session_token='" + imageUpdate.sessionToken + "'";
+                        sqlCommand.CommandType = System.Data.CommandType.Text;
+                        sqlCommand.Connection = sqlConnection;
+                        sqlConnection.Open();
+                        using (MySqlDataReader sqlDataReader = sqlCommand.ExecuteReader())
+                        {
+                            while (sqlDataReader.Read())
+                            {
+                                sessionListDetails.Add(new SessionModel
+                                {
+                                    sessionDatetime=sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_date_time")),
+                                    sessionToken=sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_session_token"))
+                                });
+                            }
                         }
+                        sqlConnection.Close();
+                        if (sessionListDetails.Count <= 0)
+                        {
+                            updateResponseModel.responseCode = "200";
+                            updateResponseModel.message = "Session token invalid";
+                        }
+                        else
+                        {
+                            sqlCommand.CommandText = " UPDATE tbl_listingprofile SET fld_videoUrl='" + imageUpdate.imageURL + "'" +
+                              " WHERE fld_profileId='" + imageUpdate.profileID + "'";
+                            sqlConnection.Open();
+                            using (MySqlDataReader reader = sqlCommand.ExecuteReader())
+                            {
+                                while (reader.Read())
+                                {
+
+                                }
+                            }
+                            sqlConnection.Close();
+
+                            updateResponseModel.responseCode = "200";
+                            updateResponseModel.message = " Updated successfully.";
+                        }
+
+
+
                     }
-                    sqlConnection.Close();
+                    else
+                    {
+                        updateResponseModel.responseCode = "400";
+                        updateResponseModel.message = "invalid parameter parsing";
+                    }
+
+                   
                 }
             }
            
@@ -522,6 +676,19 @@ namespace P2PDenstist.Connector
 
             }
              return imageAdded;
+        }
+
+        public List<ImageAddRequest> imageList()
+        {
+            List<ImageAddRequest> images = new List<ImageAddRequest>();
+            using (MySqlConnection sqlConnection = new MySqlConnection(connectstring))
+            {
+                using (MySqlCommand sqlCommand = sqlConnection.CreateCommand())
+                {
+
+                }
+            }
+                return images;
         }
 
         public UpdateResponseModel deletePhotoimage(string imageID)

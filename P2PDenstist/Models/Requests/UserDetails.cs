@@ -16,5 +16,6 @@ namespace P2PDenstist.Models.Requests
         public string imageURL{ get; set; }
         public string logoURL{ get; set; }
         public string cDate{ get; set; }
+        public string sessionToken { get; set; }
     }
 }
