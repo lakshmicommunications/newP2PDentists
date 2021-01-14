@@ -197,6 +197,7 @@
     <Compile Include="Models\Requests\ListingProfileRequest.cs" />
     <Compile Include="Models\Requests\ListingProfileUpdateRequest.cs" />
     <Compile Include="Models\Requests\LoginRequestModel.cs" />
+    <Compile Include="Models\Requests\LogolistResponse.cs" />
     <Compile Include="Models\Requests\Pagelayouts.cs" />
     <Compile Include="Models\Requests\PasswordUpdateRequest.cs" />
     <Compile Include="Models\Requests\ProfileRequestDetailsLocationWise.cs" />
