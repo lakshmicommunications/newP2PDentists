@@ -191,13 +191,14 @@
     </Compile>
     <Compile Include="Models\Requests\AddBannerRequestModel.cs" />
     <Compile Include="Models\Requests\DoctorregisterModel.cs" />
+    <Compile Include="Models\Requests\GeneralInfoModel.cs" />
     <Compile Include="Models\Requests\HomepageVideolist.cs" />
     <Compile Include="Models\Requests\ImageAddRequest.cs" />
     <Compile Include="Models\Requests\ImageUpdateListingProfile.cs" />
     <Compile Include="Models\Requests\ListingProfileRequest.cs" />
     <Compile Include="Models\Requests\ListingProfileUpdateRequest.cs" />
     <Compile Include="Models\Requests\LoginRequestModel.cs" />
-    <Compile Include="Models\Requests\LogolistResponse.cs" />
+    <Compile Include="Models\Requests\LogolistRequest.cs" />
     <Compile Include="Models\Requests\Pagelayouts.cs" />
     <Compile Include="Models\Requests\PasswordUpdateRequest.cs" />
     <Compile Include="Models\Requests\ProfileRequestDetailsLocationWise.cs" />
@@ -206,6 +207,7 @@
     <Compile Include="Models\Requests\SpeciazationMaster.cs" />
     <Compile Include="Models\Requests\TestimonialsRequest.cs" />
     <Compile Include="Models\Requests\UserDetails.cs" />
+    <Compile Include="Models\Requests\VideoListRequest.cs" />
     <Compile Include="Models\Requests\VideoUpdateRequest.cs" />
     <Compile Include="Models\Responses\AddBannerDetailsResponse.cs" />
     <Compile Include="Models\Responses\CategoryDetailsResponseModel.cs" />
@@ -216,7 +218,9 @@
     <Compile Include="Models\Responses\ListingAdvert.cs" />
     <Compile Include="Models\Responses\ListingAdvertResponse.cs" />
     <Compile Include="Models\Responses\ListingProfileAddedResponse.cs" />
+    <Compile Include="Models\Responses\ListingProfileResponse.cs" />
     <Compile Include="Models\Responses\ListProfileListResponse.cs" />
+    <Compile Include="Models\Responses\LogoListResponse.cs" />
     <Compile Include="Models\Responses\NearbydoctorListModel.cs" />
     <Compile Include="Models\Responses\PackageListDetailsModel.cs" />
     <Compile Include="Models\Responses\PackageListmodel.cs" />
@@ -234,6 +238,7 @@
     <Compile Include="Models\Responses\UpdateResponseModel.cs" />
     <Compile Include="Models\Responses\UserAddedResponse.cs" />
     <Compile Include="Models\Responses\userValidationResponseModel.cs" />
+    <Compile Include="Models\Responses\VideoListResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\Constants.cs" />
   </ItemGroup>

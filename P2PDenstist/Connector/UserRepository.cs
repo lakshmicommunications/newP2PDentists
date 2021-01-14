@@ -257,6 +257,83 @@ namespace P2PDenstist.Connector
                 return profileRequestDetailsLocationWises;
         }
 
+        public List<GeneralInfoModel> generalinfoListingProfile()
+        {
+            List<GeneralInfoModel> generalinfoListingProfile = new List<GeneralInfoModel>();
+            using (MySqlConnection sqlConnection = new MySqlConnection(connectstring))
+            {
+                using (MySqlCommand sqlCommand = sqlConnection.CreateCommand())
+                {
+                    sqlCommand.CommandText = " SELECT *FROM tbl_listingprofile";
+                    sqlCommand.CommandType = System.Data.CommandType.Text;
+                    sqlCommand.Connection = sqlConnection;
+                    sqlConnection.Open();
+                    using (MySqlDataReader sqlDataReader = sqlCommand.ExecuteReader())
+                    {
+                        while (sqlDataReader.Read())
+                        {
+                            generalinfoListingProfile.Add(new GeneralInfoModel
+                            {
+                                profileID= sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_profileId")),
+                                userID= sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_userId")),
+                                address = sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_address1")),
+                                address2 = sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_address2")),
+                                businessName = sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_businessName")),
+                                firstName = sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_fName")),
+                                lastName = sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_lName")),
+                                salutation = sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_salutation")),
+                                email = sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_email")),
+                                city = sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_city")),
+                                country = sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_country")),
+                                postal = sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_postcode")),
+
+                            });
+                        }
+                    }
+                }
+            }
+            return generalinfoListingProfile;
+        }
+        public List<GeneralInfoModel> generalinfoListingProfileIDWise(string profileID)
+        {
+            List<GeneralInfoModel> generalinfoListingProfile = new List<GeneralInfoModel>();
+            using (MySqlConnection sqlConnection = new MySqlConnection(connectstring))
+            {
+                using (MySqlCommand sqlCommand = sqlConnection.CreateCommand())
+                {
+                    sqlCommand.CommandText = " SELECT *FROM tbl_listingprofile WHERE fld_profileid='"+profileID+"'";
+                    sqlCommand.CommandType = System.Data.CommandType.Text;
+                    sqlCommand.Connection = sqlConnection;
+                    sqlConnection.Open();
+                    using (MySqlDataReader sqlDataReader = sqlCommand.ExecuteReader())
+                    {
+                        while (sqlDataReader.Read())
+                        {
+                            generalinfoListingProfile.Add(new GeneralInfoModel
+                            {
+                                profileID= sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_profileId")),
+                                userID= sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_userId")),
+                                address = sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_address1")),
+                                address2 = sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_address2")),
+                                businessName = sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_businessName")),
+                                firstName = sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_fName")),
+                                lastName = sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_lName")),
+                                salutation = sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_salutation")),
+                                email = sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_email")),
+                                city = sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_city")),
+                                country = sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_country")),
+                                postal = sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_postcode")),
+
+                            });
+                        }
+                    }
+                }
+            }
+            return generalinfoListingProfile;
+        }
+
+
+
        
         [Obsolete]
         public ListingProfileAddedResponse addedResponse(ListingProfileRequest listingProfileRequest)
@@ -472,7 +549,7 @@ namespace P2PDenstist.Connector
                 return homepageVideolists;
         }
 
-        public UpdateResponseModel imageUpdateListingURL(ImageUpdateListingProfile imageUpdate)
+        public UpdateResponseModel logoUrlListingURL(ImageUpdateListingProfile imageUpdate)
         {
             UpdateResponseModel updateResponseModel = new UpdateResponseModel();
             List<SessionModel> sessionListDetails = new List<SessionModel>();
@@ -677,6 +754,30 @@ namespace P2PDenstist.Connector
              return imageAdded;
         }
 
+        public UpdateResponseModel imageUpdate(ImageAddRequest imageAddRequest)
+        {
+            UpdateResponseModel updateResponseModel = new UpdateResponseModel();
+            using (MySqlConnection sqlConnection = new MySqlConnection(connectstring))
+            {
+                using (MySqlCommand sqlCommand = sqlConnection.CreateCommand())
+                {
+                    sqlCommand.CommandText = " UPDATE tbl_images SET fld_imageUrl='" + imageAddRequest.imageURL + "'" +
+                        " WHERE fld_imageId='" + imageAddRequest.imageID + "'";
+                    sqlConnection.Open();
+                    using (MySqlDataReader reader = sqlCommand.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+
+                        }
+                    }
+                    sqlConnection.Close();
+                }
+            }
+            return updateResponseModel;
+        }
+        
+
         public List<ImageAddRequest> imageList()
         {
             List<ImageAddRequest> images = new List<ImageAddRequest>();
@@ -703,6 +804,60 @@ namespace P2PDenstist.Connector
                 }
             }
                 return images;
+        }
+
+        public List<LogolistRequest> logolistRequests()
+        {
+            List<LogolistRequest> logolistRequests = new List<LogolistRequest>();
+            using (MySqlConnection sqlConnection = new MySqlConnection(connectstring))
+            {
+                using (MySqlCommand sqlCommand = sqlConnection.CreateCommand())
+                {
+                    sqlCommand.CommandText = " SELECT *FROM tbl_listingprofile";
+                    sqlCommand.CommandType = System.Data.CommandType.Text;
+                    sqlCommand.Connection = sqlConnection;
+                    sqlConnection.Open();
+                    using (MySqlDataReader sqlDataReader = sqlCommand.ExecuteReader())
+                    {
+                        while (sqlDataReader.Read())
+                        {
+                            logolistRequests.Add(new LogolistRequest
+                            {
+                                profileID=sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_profileId")),
+                                logoURL=sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_logoUrl")),
+                            });
+                        }
+                    }
+                }
+            }
+                return logolistRequests;
+        }
+
+        public List<VideoListRequest> videoListRequests()
+        {
+            List<VideoListRequest> videoListRequests = new List<VideoListRequest>();
+            using (MySqlConnection sqlConnection = new MySqlConnection(connectstring))
+            {
+                using (MySqlCommand sqlCommand = sqlConnection.CreateCommand())
+                {
+                    sqlCommand.CommandText = " SELECT *FROM tbl_listingprofile";
+                    sqlCommand.CommandType = System.Data.CommandType.Text;
+                    sqlCommand.Connection = sqlConnection;
+                    sqlConnection.Open();
+                    using (MySqlDataReader sqlDataReader = sqlCommand.ExecuteReader())
+                    {
+                        while (sqlDataReader.Read())
+                        {
+                            videoListRequests.Add(new VideoListRequest
+                            {
+                                profileID = sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_profileId")),
+                                videoURL = sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_videoUrl")),
+                            });
+                        }
+                    }
+                }
+            }
+            return videoListRequests;
         }
 
         public UpdateResponseModel deletePhotoimage(string imageID)

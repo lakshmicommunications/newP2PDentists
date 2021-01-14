@@ -5,9 +5,9 @@ using System.Web;
 
 namespace P2PDenstist.Models.Requests
 {
-    public class LogolistResponse
+    public class VideoListRequest
     {
         public string profileID { get; set; }
-        public string logoURL { get; set; }
+        public string videoURL { get; set; }
     }
 }

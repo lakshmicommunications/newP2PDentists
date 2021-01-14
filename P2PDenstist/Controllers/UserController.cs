@@ -96,6 +96,50 @@ namespace P2PDenstist.Controllers
             }
             return nearbydoctorListModel;
         }
+        [HttpGet]
+        public ListingProfileResponse listingProfileList()
+        {
+            ListingProfileResponse listingProfileResponse = new ListingProfileResponse();
+            UserRepository userRepository = new UserRepository();
+            List<GeneralInfoModel> generalInfoDetails = new List<GeneralInfoModel>();
+            generalInfoDetails = userRepository.generalinfoListingProfile();
+            if (generalInfoDetails.Count <= 0)
+            {
+                listingProfileResponse.responseCode = "200";
+                listingProfileResponse.responseMessage = "No data found";
+                listingProfileResponse.generalInfoDetails = generalInfoDetails;
+            }
+            else
+            {
+                listingProfileResponse.responseCode = "200";
+                listingProfileResponse.responseMessage = "Listing profile details";
+                listingProfileResponse.generalInfoDetails = generalInfoDetails;
+            }
+            return listingProfileResponse;
+        }
+        
+        [HttpGet]
+        public ListingProfileResponse listingProfileListProfileWise(string profileID)
+        {
+            ListingProfileResponse listingProfileResponse = new ListingProfileResponse();
+            UserRepository userRepository = new UserRepository();
+            List<GeneralInfoModel> generalInfoDetails = new List<GeneralInfoModel>();
+            generalInfoDetails = userRepository.generalinfoListingProfileIDWise(profileID);
+            if (generalInfoDetails.Count <= 0)
+            {
+                listingProfileResponse.responseCode = "200";
+                listingProfileResponse.responseMessage = "No data found";
+                listingProfileResponse.generalInfoDetails = generalInfoDetails;
+            }
+            else
+            {
+                listingProfileResponse.responseCode = "200";
+                listingProfileResponse.responseMessage = "Listing profile details";
+                listingProfileResponse.generalInfoDetails = generalInfoDetails;
+            }
+            return listingProfileResponse;
+        }
+
 
         [HttpGet]
         public PaidDoctorReponse featuredDocotList()
@@ -269,7 +313,7 @@ namespace P2PDenstist.Controllers
                         updateValue.imageURL = "/upload_images/" + updateValue.profileID + "/" + fileName1;
                     }
                     UserRepository repository = new UserRepository();
-                    updateResponseModel = repository.imageUpdateListingURL(updateValue);
+                    updateResponseModel = repository.logoUrlListingURL(updateValue);
 
                 }
 
@@ -326,6 +370,50 @@ namespace P2PDenstist.Controllers
            
             return updateResponseModel;
         }
+        [HttpPost]
+        public async Task<UpdateResponseModel> updateImage()
+        {
+            UpdateResponseModel updateResponseModel = new UpdateResponseModel();
+            UserRepository userRepository = new UserRepository();
+            string fileName = null, fileName1 = null, filePath = null;
+            var httpRequest = HttpContext.Current.Request;
+            try
+            {
+                if (httpRequest.Files.Count > 0)
+                {
+                    ImageAddRequest imageAddRequest = new ImageAddRequest();
+                    var param = httpRequest.Params;
+                    var ImageRequestDetails = param["imagedetails"];
+                    var updateValue = JsonConvert.DeserializeObject<ImageAddRequest>(ImageRequestDetails);
+
+                    foreach (string file in httpRequest.Files)
+                    {
+                        var postedFile = httpRequest.Files[file];
+                        fileName = Regex.Replace(postedFile.FileName.Split('\\').LastOrDefault().Split('/').LastOrDefault(), "[^A-Za-z0-9_. ]+", "");
+                        fileName1 = Regex.Replace(fileName, " ", string.Empty);
+                        var domainDir = HttpContext.Current.Server.MapPath("~/upload_images/" + updateValue.profileID + "/");
+                        if (!Directory.Exists(domainDir))
+                        {
+                            Directory.CreateDirectory(domainDir);
+                        }
+                        filePath = HttpContext.Current.Server.MapPath("~/upload_images/" + updateValue.profileID + "/" + fileName1);
+                        postedFile.SaveAs(filePath);
+                        updateValue.imageURL = "/upload_images/" + updateValue.profileID + "/" + fileName1;
+                    }
+                    UserRepository repository = new UserRepository();
+
+                    updateResponseModel = repository.imageUpdate(updateValue);
+
+                }
+
+            }
+            catch (Exception e)
+            {
+                updateResponseModel.message = e.ToString();
+            }
+            return updateResponseModel;
+        }
+
         public async Task<ImageAddedResponse> updatePhoto()
         {
             ImageAddedResponse imageAddedResponse = new ImageAddedResponse();
@@ -363,6 +451,54 @@ namespace P2PDenstist.Controllers
                 imageAddedResponse.responseMessage = r.ToString();
             }
             return imageAddedResponse;
+        }
+        
+
+
+        [HttpGet]
+        public VideoListResponse VideoListResponse()
+        {
+            VideoListResponse videoListResponse = new VideoListResponse();
+            UserRepository userRepository = new UserRepository();
+            List<VideoListRequest> videoListRequests = new List<VideoListRequest>();
+            videoListRequests = userRepository.videoListRequests();
+            if (videoListRequests.Count <= 0)
+            {
+                videoListResponse.responseCode = "200";
+                videoListResponse.responseMessage = "No data found";
+                videoListResponse.videoListRequests = videoListRequests;
+            }
+            else
+            {
+                videoListResponse.responseCode = "200";
+                videoListResponse.responseMessage = "Video list details";
+                videoListResponse.videoListRequests = videoListRequests;
+            }
+            return videoListResponse;
+        }
+
+        [HttpGet]
+        public LogoListResponse LogoListResponse()
+        {
+            LogoListResponse imageListResponse = new LogoListResponse();
+            UserRepository userRepository = new UserRepository();
+            List<LogolistRequest> imageListDetails = new List<LogolistRequest>();
+            imageListDetails = userRepository.logolistRequests();
+            if (imageListDetails.Count <= 0)
+            {
+                imageListResponse.responseCode = "200";
+                imageListResponse.responseMessage = "No data found";
+                imageListResponse.logolistRequests = imageListDetails;
+            }
+            else
+            {
+                imageListResponse.responseCode = "200";
+                imageListResponse.responseMessage = "Logo list details";
+                imageListResponse.logolistRequests = imageListDetails;
+            }
+            return imageListResponse;
+
+
         }
 
         public UpdateResponseModel deletePhoto(string imageID)
