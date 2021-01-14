@@ -11,8 +11,8 @@ namespace P2PDenstist
         public static void Register(HttpConfiguration config)
         {
             // Web API configuration and services
-        //  EnableCorsAttribute cors = new EnableCorsAttribute("https://localhost:44311/", "*", "GET,POST");
-            EnableCorsAttribute cors = new EnableCorsAttribute("http://directoryapi.p2pdentist.com/", "*", "GET,POST");
+          EnableCorsAttribute cors = new EnableCorsAttribute("https://localhost:44311/", "*", "GET,POST");
+         //   EnableCorsAttribute cors = new EnableCorsAttribute("http://directoryapi.p2pdentist.com/", "*", "GET,POST");
             config.EnableCors(cors);
             // Web API routes
             config.MapHttpAttributeRoutes();

@@ -130,7 +130,27 @@ namespace P2PDenstist.Controllers
             return addBannerDetailsResponse;
         }
 
-
+        [HttpGet]
+        public ImageListResponse imageListing()
+        {
+            ImageListResponse imageListResponse = new ImageListResponse();
+            List<ImageAddRequest> imageListDetails = new List<ImageAddRequest>();
+            UserRepository repository = new UserRepository();
+            imageListDetails = repository.imageList();
+            if (imageListDetails.Count <= 0)
+            {
+                imageListResponse.responseCode = "200";
+                imageListResponse.responseMessage = "Nodata found";
+                imageListResponse.imageListDetails = imageListDetails;
+            }
+            else
+            {
+                imageListResponse.responseCode = "200";
+                imageListResponse.responseMessage = "Image listDetails";
+                imageListResponse.imageListDetails = imageListDetails;
+            }
+            return imageListResponse;
+        }
         [HttpGet]
         public ProfileDetailsResponseModel claimListing()
         {

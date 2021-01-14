@@ -257,8 +257,7 @@ namespace P2PDenstist.Connector
                 return profileRequestDetailsLocationWises;
         }
 
-        
-
+       
         [Obsolete]
         public ListingProfileAddedResponse addedResponse(ListingProfileRequest listingProfileRequest)
         {
@@ -685,7 +684,22 @@ namespace P2PDenstist.Connector
             {
                 using (MySqlCommand sqlCommand = sqlConnection.CreateCommand())
                 {
-
+                    sqlCommand.CommandText = " SELECT *FROM tbl_images";
+                    sqlCommand.CommandType = System.Data.CommandType.Text;
+                    sqlCommand.Connection = sqlConnection;
+                    sqlConnection.Open();
+                    using (MySqlDataReader sqlDataReader = sqlCommand.ExecuteReader())
+                    {
+                        while (sqlDataReader.Read())
+                        {
+                            images.Add(new ImageAddRequest
+                            {
+                                imageID=sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_imageId")),
+                                imageURL=sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_imageUrl")),
+                                profileID=sqlDataReader.GetString(sqlDataReader.GetOrdinal("fld_profileId")),
+                            });
+                        }
+                    }
                 }
             }
                 return images;

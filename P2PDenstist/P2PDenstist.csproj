@@ -211,6 +211,7 @@
     <Compile Include="Models\Responses\DoctorAddedResponseModel.cs" />
     <Compile Include="Models\Responses\HomepageVideoResponse.cs" />
     <Compile Include="Models\Responses\ImageAddedResponse.cs" />
+    <Compile Include="Models\Responses\ImageListResponse.cs" />
     <Compile Include="Models\Responses\ListingAdvert.cs" />
     <Compile Include="Models\Responses\ListingAdvertResponse.cs" />
     <Compile Include="Models\Responses\ListingProfileAddedResponse.cs" />
